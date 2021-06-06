@@ -18,7 +18,7 @@
     ></v-img>
 
 
-    <v-card-title>Cafe Badilico</v-card-title>
+    <v-card-title>{{author}}</v-card-title>
 
     <v-card-text>
       <v-row
@@ -26,29 +26,29 @@
         class="mx-0"
       >
         <v-rating
-          :value="4.5"
-          color="amber"
+          color="primary"
           dense
+          length="1"
           half-increments
           readonly
-          size="14"
+          size="24"
         ></v-rating>
 
         <div class="grey--text ms-4">
-          4.5 (413)
+          {{likes}}
         </div>
       </v-row>
 
       <div class="my-4 text-subtitle-1">
-        $ • Italian, Cafe
+        {{updatedAt}}
       </div>
 
-      <div>Small plates, salads & sandwiches - an intimate setting with 12 indoor seats plus patio seating.</div>
+      <div>{{bio}}</div>
     </v-card-text>
 
     <v-divider class="mx-4"></v-divider>
 
-    <v-card-title>Tonight's availability</v-card-title>
+    <v-card-title>{{country}}</v-card-title>
 
     <v-card-text>
       <v-chip-group
@@ -56,7 +56,8 @@
         active-class="deep-purple accent-4 white--text"
         column
       >
-        <v-chip>5:30PM</v-chip>
+        <v-chip
+        class="ma-2">5:30PM</v-chip>
 
         <v-chip>7:30PM</v-chip>
 
@@ -93,7 +94,30 @@ import { getPhotoById } from "@/services/unsplash.js";
     imageUrl() {
       if (this.unsplashData) return this.unsplashData["urls"]["regular"];
       return null;
-    }},
+    },
+    updatedAt() {
+      if (this.unsplashData) return this.unsplashData["updated_at"].slice(0, 10);
+      return null;
+    },
+    author() {
+      if (this.unsplashData) return this.unsplashData["user"]["name"];
+      return null;
+    },
+    likes() {
+      if (this.unsplashData) return this.unsplashData["likes"];
+      return null;
+    }
+    ,
+    bio() {
+      if (this.unsplashData) return this.unsplashData["user"]["bio"];
+      return null;
+    }
+    ,
+    country() {
+      if (this.unsplashData) return this.unsplashData["user"]["location"];
+      return null;
+    }
+    },
 
     methods: {
       reserve () {
@@ -106,7 +130,7 @@ import { getPhotoById } from "@/services/unsplash.js";
         featured: true,
       };
       this.dataLoading = true;
-      getPhotoById(param, "NVSIKbmAyWs").then(res => {
+      getPhotoById(param, this.$route.params.photoId).then(res => {
         this.unsplashData = res;
         console.log(res);
         this.dataLoading = false;
