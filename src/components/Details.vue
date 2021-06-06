@@ -55,32 +55,45 @@
     </v-card-text>
 
     <v-card-actions>
+      <v-tooltip v-if="favorite" left>
+      <template v-slot:activator="{ on, attrs }">
       <v-btn
        class="mx-2"
         fab
         dark
         small
         color="pink"
-        v-if="favorite"
         @click="removeFromFavorites"
+        v-bind="attrs"
+        v-on="on"
       >
        <v-icon dark>
         mdi-heart
       </v-icon>
       </v-btn>
+      </template>
+      <span>Eliminar de Favoritos</span>
+      </v-tooltip>
+
+      <v-tooltip v-else left>
+      <template v-slot:activator="{ on, attrs }">
       <v-btn
         class="mx-2"
         fab
         dark
         small
         color="gray"
-        v-else
         @click="addToFavorites"
+        v-bind="attrs"
+        v-on="on"
       >
       <v-icon dark>
         mdi-heart
       </v-icon>
       </v-btn>
+      </template>
+      <span>Agregar a Favoritos</span>
+      </v-tooltip>
     </v-card-actions>
   </v-card>
   <v-snackbar
