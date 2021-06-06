@@ -48,8 +48,46 @@
     </v-card-text>
 
     <v-divider class="mx-4"></v-divider>
+  
 
-    <v-card-title>{{country}}</v-card-title>
+      <v-item-group>
+        <v-container mb-6 class="grupo-pais">
+          <v-row>
+              <v-col>
+              <v-item>
+              <v-card-title>{{country}}</v-card-title>
+              </v-item>
+              </v-col>
+              <v-col>
+              <v-item>
+              <v-img id="country-flag"
+                    lazy-src="https://picsum.photos/id/11/10/6"
+                    max-height="100"
+                    max-width="71"
+                    :src="countryFlagLink"
+                  ></v-img>
+              </v-item>
+              </v-col>
+              <v-col>
+              <v-item>
+              <template>
+                <div class="text-center">
+                  <v-btn
+                    rounded
+                    color="primary"
+                    dark
+                  >
+                    Ver fotos del mismo país
+                  </v-btn>
+                </div>
+              </template>
+              </v-item>
+              </v-col>
+          </v-row>
+        </v-container>
+      </v-item-group>
+    
+
 
     <v-card-text>
     </v-card-text>
@@ -119,6 +157,7 @@
 import { getPhotoById } from "@/services/unsplash.js";
 import store from '../store/store';
 import * as types from '../store/types'
+import flags from '../assets/countriesDict'
 
 
   export default {
@@ -128,7 +167,8 @@ import * as types from '../store/types'
       unsplashData: null,
       favorite: false,
       snackbar: false,
-      snackbarText: ``,
+      snackbarText: '',
+      countryflag: ''
     }),
     created() {
       this.searchPhoto()
@@ -158,9 +198,19 @@ import * as types from '../store/types'
     }
     ,
     country() {
-      if (this.unsplashData) return this.unsplashData["user"]["location"];
-      return null;
+      if (this.unsplashData){
+        return this.unsplashData["user"]["location"]
+        } else {
+          return null
+          }
     },
+    countryFlagLink() {
+      if (this.unsplashData){
+        return `https://flagcdn.com/w80/${flags[this.unsplashData["user"]["location"]]}.png`
+        } else {
+          return null
+          }
+    }
     
     },
 
@@ -210,10 +260,21 @@ import * as types from '../store/types'
     },
     removeSnackbar() {
       this.snackbar = false
-    }
+    },
+    
   
     },
   }
 </script>
+<style>
 
+#country-flag {
+ border: 1px solid gray;
+}
+
+.grupo-pais {
+  padding-top: 5%;
+}
+
+</style>
 
