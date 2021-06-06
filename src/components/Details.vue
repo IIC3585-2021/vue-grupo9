@@ -1,8 +1,9 @@
 <template>
+<div>
   <v-card
     :loading="loading"
     class="mx-auto my-12"
-    max-width="374"
+    max-width="674"
   >
     <template slot="progress">
       <v-progress-linear
@@ -51,45 +52,75 @@
     <v-card-title>{{country}}</v-card-title>
 
     <v-card-text>
-      <v-chip-group
-        v-model="selection"
-        active-class="deep-purple accent-4 white--text"
-        column
-      >
-        <v-chip
-        class="ma-2">5:30PM</v-chip>
-
-        <v-chip>7:30PM</v-chip>
-
-        <v-chip>8:00PM</v-chip>
-
-        <v-chip>9:00PM</v-chip>
-      </v-chip-group>
     </v-card-text>
 
     <v-card-actions>
       <v-btn
-        color="deep-purple lighten-2"
-        text
-        @click="reserve"
+       class="mx-2"
+        fab
+        dark
+        small
+        color="pink"
+        v-if="favorite"
+        @click="removeFromFavorites"
       >
-        Reserve
+       <v-icon dark>
+        mdi-heart
+      </v-icon>
+      </v-btn>
+      <v-btn
+        class="mx-2"
+        fab
+        dark
+        small
+        color="gray"
+        v-else
+        @click="addToFavorites"
+      >
+      <v-icon dark>
+        mdi-heart
+      </v-icon>
       </v-btn>
     </v-card-actions>
   </v-card>
+  <v-snackbar
+      v-model="snackbar"
+    >
+      {{ snackbarText }}
+
+      <template v-slot:action="{ attrs }">
+        <v-btn
+          color="pink"
+          text
+          v-bind="attrs"
+          @click="snackbar = false"
+        >
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
+</div>
 </template>
 
 <script>
 import { getPhotoById } from "@/services/unsplash.js";
+import store from '../store/store';
+import * as types from '../store/types'
 
 
   export default {
     data: () => ({
       loading: false,
       selection: 1,
-      unsplashData: null
+      unsplashData: null,
+      favorite: false,
+      snackbar: false,
+      snackbarText: ``,
     }),
-    created() {this.searchPhoto()},
+    created() {
+      this.searchPhoto()
+      this.isFavorite()
+      },
     computed: {
     imageUrl() {
       if (this.unsplashData) return this.unsplashData["urls"]["regular"];
@@ -116,7 +147,8 @@ import { getPhotoById } from "@/services/unsplash.js";
     country() {
       if (this.unsplashData) return this.unsplashData["user"]["location"];
       return null;
-    }
+    },
+    
     },
 
     methods: {
@@ -135,6 +167,36 @@ import { getPhotoById } from "@/services/unsplash.js";
         console.log(res);
         this.dataLoading = false;
       });
+    },
+    addToFavorites() {
+      store.dispatch({
+            type: types.addPhoto,
+            photoId: this.$route.params.photoId
+          })
+          this.favorite = true
+          this.snackbarText = "Agregado a Favoritos"
+          this.snackbar = true;
+          setTimeout(() => { this.removeSnackbar(); }, 3000);
+    },
+    removeFromFavorites() {
+      store.dispatch({
+            type: types.removePhoto,
+            photoId: this.$route.params.photoId
+          })
+          this.favorite = false;
+          this.snackbarText = "Eliminado de Favoritos"
+          this.snackbar = true;
+          setTimeout(() => { this.removeSnackbar(); }, 3000);
+    },
+    isFavorite() {
+      if (store.getters.photosSet.has(this.$route.params.photoId) ){
+        this.favorite = true
+        } else {
+          this.favorite = false
+      }
+    },
+    removeSnackbar() {
+      this.snackbar = false
     }
   
     },
