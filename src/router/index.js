@@ -44,10 +44,6 @@ export default new Router({
         path: '/detail',
         name: 'Detail',
         component: Detail
-      }, {
-        path: '/detail',
-        name: 'Detail',
-        component: Detail
-      },
+      }
     ]
   })

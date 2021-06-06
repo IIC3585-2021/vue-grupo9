@@ -14,8 +14,9 @@
 
     <v-img
       height="250"
-      src="https://cdn.vuetifyjs.com/images/cards/cooking.png"
+      :src="imageUrl"
     ></v-img>
+
 
     <v-card-title>Cafe Badilico</v-card-title>
 
@@ -78,11 +79,21 @@
 </template>
 
 <script>
+import { getPhotoById } from "@/services/unsplash.js";
+
+
   export default {
     data: () => ({
       loading: false,
       selection: 1,
+      unsplashData: null
     }),
+    created() {this.searchPhoto()},
+    computed: {
+    imageUrl() {
+      if (this.unsplashData) return this.unsplashData["urls"]["regular"];
+      return null;
+    }},
 
     methods: {
       reserve () {
@@ -90,6 +101,20 @@
 
         setTimeout(() => (this.loading = false), 2000)
       },
+      searchPhoto() {
+      const param = {
+        featured: true,
+      };
+      this.dataLoading = true;
+      getPhotoById(param, "NVSIKbmAyWs").then(res => {
+        this.unsplashData = res;
+        console.log(res);
+        this.dataLoading = false;
+      });
+    }
+  
     },
   }
 </script>
+
+
