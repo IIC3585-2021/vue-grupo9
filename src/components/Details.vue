@@ -259,7 +259,7 @@ import flags from '../assets/countriesDict'
     },
     removeSnackbar() {
       this.snackbar = false
-    },
+    }
     
   
     },

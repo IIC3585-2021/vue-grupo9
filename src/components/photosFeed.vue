@@ -1,11 +1,5 @@
 <template>
   <v-container fluid>
-    <v-toolbar color="orange" dark>
-      <v-toolbar-title class="mx-6">PhotoBook</v-toolbar-title>
-
-      <v-spacer></v-spacer>
-      <v-toolbar-title class="mx-6">Grupo9</v-toolbar-title>
-    </v-toolbar>
     <v-row dense>
       <v-col v-for="card in cards" :key="card.title" cols="3">
         <v-card class="mx-auto my-3" max-width="344">
