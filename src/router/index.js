@@ -28,6 +28,7 @@ export default router */
 
 import App from '../App.vue'
 import Detail from '../components/Details.vue'
+import photosFeed from '../components/photosFeed.vue'
 import Vue from 'vue'
 import Router from 'vue-router'
 Vue.use(Router)
@@ -44,6 +45,11 @@ export default new Router({
         path: '/detail/:photoId',
         name: 'Detail',
         component: Detail
+      },
+      {
+        path: '/feed',
+        name: 'Feed',
+        component: photosFeed
       }
     ]
   })

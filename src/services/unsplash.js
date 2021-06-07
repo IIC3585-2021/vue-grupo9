@@ -1,9 +1,9 @@
 import axios from "axios";
 
-const accessKey = "oATOAhYStQlB8L6si3nuwRqscwn6v-bMRtgRZizy7q4";
+const accessKey = "gShsdtzVIBO2FSf4JJlS5t9QDldBNPGGXpvyPttwMsU";
 
 const apiEndpoint = "https://api.unsplash.com/";
-const randomPhotoEndpoint = `${apiEndpoint}photos/random`;
+const randomPhotoEndpoint = `${apiEndpoint}photos/random/`;
 const photoByIdEndpoint = `${apiEndpoint}photos/`;
 
 export const getRandomPhoto = async param => {
@@ -11,12 +11,11 @@ export const getRandomPhoto = async param => {
     const res = await axios.get(randomPhotoEndpoint, {
       params: {
         client_id: accessKey,
-        count: 1,
+        count: 50,
         ...param
       }
     });
-
-    if (res.status == 200) return res.data[0];
+    if (res.status == 200) return res.data;
     else return null;
   } catch (exc) {
     console.error(exc);

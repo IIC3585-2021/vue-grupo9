@@ -227,7 +227,6 @@ import flags from '../assets/countriesDict'
       this.dataLoading = true;
       getPhotoById(param, this.$route.params.photoId).then(res => {
         this.unsplashData = res;
-        console.log(res);
         this.dataLoading = false;
       });
     },
